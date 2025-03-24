@@ -33,6 +33,8 @@ android {
         resources {
             excludes += "META-INF/native-image/reflect-config.json"
             excludes += "META-INF/native-image/native-image.properties"
+            excludes += "META-INF/native-image/org.mongodb/bson/native-image.properties"
+
 
         }
     }
@@ -77,9 +79,13 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
 
-    implementation(libs.mongodb.driver.kotlin.coroutine)
-    implementation (libs.slf4j.api)
-    implementation (libs.slf4j.simple)
+    //implementation(libs.mongodb.driver.kotlin.coroutine)
+    //implementation (libs.slf4j.api)
+   // implementation (libs.slf4j.simple)
+    //implementation(libs.bson.kotlinx)
+
+    implementation (libs.kmongo)  // KMongo Core
+    implementation (libs.mongodb.driver.sync) // MongoDB Driver
 
 
 }

@@ -1,6 +1,5 @@
 package com.invictus.envisionar.screens.auth
 
-import MongoDBAuthRepository
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,7 +20,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.invictus.envisionar.LoginScreen
 import com.invictus.envisionar.R
-import com.mongodb.kotlin.client.coroutine.MongoClient
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

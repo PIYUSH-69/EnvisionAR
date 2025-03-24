@@ -22,18 +22,6 @@ import kotlinx.coroutines.withContext
 @Composable
 fun SplashScreen(navController: NavController) {
 
-    val repository = MongoDBAuthRepository.getInstance()
-
-// Register a user
-    LaunchedEffect(Unit) {
-        val isRegistered = repository.registerUser("John Doe", "john@example.com", "password123")
-        if (isRegistered) {
-            println("User registered successfully")
-        } else {
-            println("Failed to register user")
-        }
-    }
-
     LaunchedEffect(Unit) {
         delay(2000) // Delay for 2 seconds
         navController.navigate(LoginScreen){

@@ -1,5 +1,6 @@
 [versions]
 agp = "8.9.0"
+kmongo = "4.9.0"
 kotlin = "2.0.21"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -10,6 +11,7 @@ lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
 composeBom = "2025.03.00"
 mongodbDriverKotlinCoroutine = "5.3.0"
+mongodbDriverSync = "4.9.1"
 serialization = "1.6.3"
 composeNavigation = "2.8.9"
 slf4jApi = "1.7.32"
@@ -17,9 +19,12 @@ slf4jSimple = "1.7.32"
 
 
 [libraries]
+bson-kotlinx = { module = "org.mongodb:bson-kotlinx", version.ref = "mongodbDriverKotlinCoroutine" }
+kmongo = { module = "org.litote.kmongo:kmongo", version.ref = "kmongo" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesCore" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 mongodb-driver-kotlin-coroutine = { module = "org.mongodb:mongodb-driver-kotlin-coroutine", version.ref = "mongodbDriverKotlinCoroutine" }
+mongodb-driver-sync = { module = "org.mongodb:mongodb-driver-sync", version.ref = "mongodbDriverSync" }
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

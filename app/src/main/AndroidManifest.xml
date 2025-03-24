@@ -14,16 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EnvisionAR"
         tools:targetApi="31">
-        <activity
-            android:name=".screens.MainActivity"
-            android:exported="false"
-            android:label="@string/title_activity_main"
-            android:theme="@style/Theme.EnvisionAR" />
-        <activity
-            android:name=".screens.SplashScreen"
-            android:exported="false"
-            android:label="@string/title_activity_splash_screen"
-            android:theme="@style/Theme.EnvisionAR" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
