@@ -2,4 +2,6 @@
     <string name="app_name">EnvisionAR</string>
     <string name="title_activity_splash_screen">SplashScreen</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="point_your_phone_down">Point your phone down at an empty space, and move it around slowly</string>
+
 </resources>

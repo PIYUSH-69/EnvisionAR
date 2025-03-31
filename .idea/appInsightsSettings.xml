@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.invictus.envisionar" />
+                  <option name="mobileSdkAppId" value="1:1069926447307:android:624ad023c610d3d035034e" />
+                  <option name="projectId" value="envisionar-3ae56" />
+                  <option name="projectNumber" value="1069926447307" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

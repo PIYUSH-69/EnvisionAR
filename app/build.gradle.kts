@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.google.gms.google.services)
 
 }
 
@@ -66,8 +67,11 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.navigation.compose)
-
-
+    implementation(libs.firebase.auth)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+    implementation(libs.firebase.firestore)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -78,14 +82,24 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.accompanist.navigation.animation)
+    // ArSceneView
+    implementation (libs.arsceneview)
 
-    //implementation(libs.mongodb.driver.kotlin.coroutine)
-    //implementation (libs.slf4j.api)
-   // implementation (libs.slf4j.simple)
-    //implementation(libs.bson.kotlinx)
+    //implementation(libs.arsceneview.v0150) // Use latest version from SceneView GitHub
+    implementation(libs.core) // Use latest ARCore version
+    implementation(libs.androidx.appcompat)
+    implementation (libs.androidx.constraintlayout) // Required for ConstraintLayout
+    implementation (libs.material)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.gif) // Support for GIFs
+// Check for latest version
 
-    implementation (libs.kmongo)  // KMongo Core
-    implementation (libs.mongodb.driver.sync) // MongoDB Driver
+
+
+//    implementation (libs.sdk.base)
+//    implementation (libs.sdk.common)
+
 
 
 }

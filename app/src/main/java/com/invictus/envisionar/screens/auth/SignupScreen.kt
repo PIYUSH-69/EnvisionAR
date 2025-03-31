@@ -1,6 +1,7 @@
 package com.invictus.envisionar.screens.auth
 
-import android.util.Log
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -10,7 +11,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
@@ -20,26 +23,30 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.invictus.envisionar.LoginScreen
 import com.invictus.envisionar.R
+import com.invictus.envisionar.firebase.FirebaseAuthManager
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 
 @OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun SignUpScreen(navController: NavController) {
+
+    val authManager = FirebaseAuthManager()
+    val context = LocalContext.current // Get the context in Compose
+
+
     var fullName by remember { mutableStateOf(TextFieldValue()) }
     var email by remember { mutableStateOf(TextFieldValue()) }
     var password by remember { mutableStateOf(TextFieldValue()) }
-    val coroutineScope = rememberCoroutineScope()
 
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF8F8F8)), // Light Gray Background
+            .background(color = Color.White), // Light Gray Background
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -48,11 +55,12 @@ fun SignUpScreen(navController: NavController) {
         ) {
             // Logo/Icon
             Image(
-                painter = painterResource(id = R.drawable.ic_launcher_foreground), // Replace with your logo
+                painter = painterResource(id = R.drawable.logo),
                 contentDescription = "App Logo",
-                modifier = Modifier.size(50.dp)
+                modifier = Modifier
+                    .width(250.dp)  // Set width
+                    .height(100.dp) // Set height (adjust for desired aspect ratio)
             )
-
             Spacer(modifier = Modifier.height(16.dp))
 
             // Title
@@ -60,7 +68,9 @@ fun SignUpScreen(navController: NavController) {
                 text = "Create Account",
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black
+                color = Color.Black ,
+                fontFamily = FontFamily.Monospace
+
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -70,7 +80,9 @@ fun SignUpScreen(navController: NavController) {
                 value = fullName,
                 onValueChange = { fullName = it },
                 label = { Text("Full Name") },
-                placeholder = { Text("John Doe") },
+                maxLines = 1,       // Limits input to one line
+
+
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier.fillMaxWidth()
             )
@@ -82,8 +94,9 @@ fun SignUpScreen(navController: NavController) {
                 value = email,
                 onValueChange = { email = it },
                 label = { Text("Email") },
-                placeholder = { Text("your@email.com") },
                 shape = RoundedCornerShape(12.dp),
+                maxLines = 1,       // Limits input to one line
+
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -94,8 +107,7 @@ fun SignUpScreen(navController: NavController) {
                 value = password,
                 onValueChange = { password = it },
                 label = { Text("Password") },
-                placeholder = { Text("••••••••") },
-                visualTransformation = PasswordVisualTransformation(),
+                maxLines = 1,       // Limits input to one line
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier.fillMaxWidth()
             )
@@ -105,15 +117,20 @@ fun SignUpScreen(navController: NavController) {
             // Create Account Button
             Button(
                 onClick = {
+                    if (validate( context,email.text, password.text)){
+                        GlobalScope.launch(Dispatchers.IO) {
+                            val user = authManager.signUp(email.text, password.text)
+                            if (user != null) {
+                                println("User signed up: ${user.email}")
+                            } else {
+                                println("Sign-up failed")
+                            }
 
-//                    GlobalScope.launch(Dispatchers.IO) {
-//                        val success = mongo.registerUser(fullName.text, email.text, password.text)
-//                        if (success) {
-//                            Log.d("MongoDB", "User registered successfully!")
-//                        } else {
-//                            Log.e("MongoDB", "Registration failed.")
-//                        }
-//                    }
+                        }
+
+                    }
+
+
 
                           },
                 shape = RoundedCornerShape(12.dp),
@@ -131,20 +148,55 @@ fun SignUpScreen(navController: NavController) {
             Button(
                 onClick ={
                     navController.navigate(LoginScreen)
-                }
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFDEDEDE)) // Change button color here
 
             ) { Row {
-                Text(text = "Already have an account?", color = Color.Gray, fontSize = 14.sp)
+                Text(text = "Already have an account?", color = Color.Black, fontSize = 14.sp)
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = "Sign In",
-                    color = Color(0xFF5A4EFF), // Purple color
+                    color = Color.Black, // Purple color
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
-                    textDecoration = TextDecoration.Underline,
                 )
             }}
 
         }
     }
+}
+
+
+
+private fun validate(context: Context, email: String, password: String): Boolean {
+    val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex()
+
+    // Check if email is valid
+    if (!email.matches(emailPattern)) {
+        Toast.makeText(context, "Invalid email format", Toast.LENGTH_SHORT).show()
+        return false
+    }
+
+    // Password validation
+    if (password.length < 6) {
+        Toast.makeText(context, "Password must be at least 6 characters long", Toast.LENGTH_SHORT).show()
+        return false
+    }
+
+    if (!password.any { it.isUpperCase() }) {
+        Toast.makeText(context, "Password must contain at least one uppercase letter", Toast.LENGTH_SHORT).show()
+        return false
+    }
+
+    if (!password.any { it.isDigit() }) {
+        Toast.makeText(context, "Password must contain at least one digit", Toast.LENGTH_SHORT).show()
+        return false
+    }
+
+    if (!password.any { "!@#$%^&*()-_=+{}[]|;:'\",.<>?/".contains(it) }) {
+        Toast.makeText(context, "Password must contain at least one special character", Toast.LENGTH_SHORT).show()
+        return false
+    }
+
+    return true // If all checks pass
 }

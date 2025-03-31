@@ -1,30 +1,51 @@
 [versions]
-agp = "8.9.0"
-kmongo = "4.9.0"
+accompanistNavigationAnimation = "0.16.1"
+agp = "8.9.1"
+appcompat = "1.7.0"
+arsceneview = "2.2.1"
+coilCompose = "2.6.0"
+coilComposeVersion = "2.5.0"
+constraintlayout = "2.2.1"
+core = "1.48.0"
+coreKtxVersion = "1.15.0"
 kotlin = "2.0.21"
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-kotlinxCoroutinesCore = "1.7.3"
+kotlinxCoroutinesCore = "1.8.0"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
-composeBom = "2025.03.00"
-mongodbDriverKotlinCoroutine = "5.3.0"
-mongodbDriverSync = "4.9.1"
+composeBom = "2025.03.01"
+lifecycleRuntimeKtxVersion = "2.8.7"
+material = "1.12.0"
+sdkBase = "1.200.1"
+sdkCommon = "1.200.1"
+sdkPanowidget = "1.200.1' // For VR Panoramas"
 serialization = "1.6.3"
 composeNavigation = "2.8.9"
-slf4jApi = "1.7.32"
-slf4jSimple = "1.7.32"
+googleGmsGoogleServices = "4.4.2"
+firebaseAuth = "23.2.0"
+credentials = "1.5.0"
+credentialsPlayServicesAuth = "1.5.0"
+googleid = "1.1.1"
+firebaseFirestore = "25.1.3"
 
 
 [libraries]
-bson-kotlinx = { module = "org.mongodb:bson-kotlinx", version.ref = "mongodbDriverKotlinCoroutine" }
-kmongo = { module = "org.litote.kmongo:kmongo", version.ref = "kmongo" }
+accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanistNavigationAnimation" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
+androidx-core-ktx-v1120 = { module = "androidx.core:core-ktx", version.ref = "coreKtxVersion" }
+androidx-lifecycle-runtime-ktx-v262 = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtxVersion" }
+arsceneview = { module = "io.github.sceneview:arsceneview", version.ref = "arsceneview" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+coil-compose-v250 = { module = "io.coil-kt:coil-compose", version.ref = "coilComposeVersion" }
+coil-gif = { module = "io.coil-kt:coil-gif", version.ref = "coilCompose" }
+core = { module = "com.google.ar:core", version.ref = "core" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesCore" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
-mongodb-driver-kotlin-coroutine = { module = "org.mongodb:mongodb-driver-kotlin-coroutine", version.ref = "mongodbDriverKotlinCoroutine" }
-mongodb-driver-sync = { module = "org.mongodb:mongodb-driver-sync", version.ref = "mongodbDriverSync" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -41,13 +62,20 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization"}
-slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4jApi" }
-slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4jSimple" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
+androidx-credentials = { group = "androidx.credentials", name = "credentials", version.ref = "credentials" }
+androidx-credentials-play-services-auth = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "credentialsPlayServicesAuth" }
+googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleid" }
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
+sdk-base = { module = "com.google.vr:sdk-base", version.ref = "sdkBase" }
+sdk-common = { module = "com.google.vr:sdk-common", version.ref = "sdkCommon" }
+sdk-panowidget = { module = "com.google.vr:sdk-panowidget", version.ref = "sdkPanowidget" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 
 
