@@ -120,20 +120,18 @@ fun LoginScreen(navController: NavController) {
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6A1B9A)),
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier.fillMaxWidth()
-            ) {
+            ){
                 Text("Sign In", fontSize = 16.sp)
             }
-
 
             Spacer(modifier = Modifier.height(16.dp))
 
             TextButton(
                 onClick =
-
                     {
                         navController.navigate(SignUpScreen)
-
-                    }) {
+                    })
+            {
                 Text("Don't have an account? Sign Up", color = Color(0xFF6A1B9A))
             }
         }

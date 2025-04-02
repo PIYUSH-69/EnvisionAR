@@ -6,10 +6,17 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Camera
+import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -31,15 +39,20 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
+
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoomRedesignerScreen() {
     var imageUri by remember { mutableStateOf<Uri?>(null) }
-    var positivePrompt by remember { mutableStateOf("") }
-    var negativePrompt by remember { mutableStateOf("") }
     val context = LocalContext.current
     var redesignedImage by remember { mutableStateOf<Bitmap?>(null) }
     val flaskApi = FlaskApi()
-    val loading =false
+    var isLoading by remember { mutableStateOf(false) }
+    val houseParts = listOf("Living Room", "Bedroom", "Kitchen", "Bathroom")
+    var expanded by remember { mutableStateOf(false) }
+    var selectedText by remember { mutableStateOf(houseParts[0]) }
+    val scrollState = rememberScrollState()
 
 
     val imagePickerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -53,96 +66,180 @@ fun RoomRedesignerScreen() {
         }
     }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Room Redesigner", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-        Spacer(modifier = Modifier.height(16.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState) // Enable scrolling
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text("Upload a Empty Room Image to redesign it", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(16.dp))
 
 
-        if (imageUri != null){
-
-            Box(
-                modifier = Modifier
-                    .size(200.dp)
-                    .background(Color.Gray, RoundedCornerShape(8.dp)),
-                contentAlignment = Alignment.Center
-            ) {
+            if (imageUri != null) {
+                Card(
+                    shape = RoundedCornerShape(8.dp),
+                    elevation = CardDefaults.cardElevation(8.dp),
+                    border = BorderStroke(2.dp, Color.Black),
+                    modifier = Modifier.padding(8.dp)
+                        .fillMaxWidth() // Ensure it fills the width
+                        .heightIn(max = 300.dp) // Set a maximum height
+                ) {
                     Image(
                         painter = rememberImagePainter(imageUri),
                         contentDescription = "Selected Image",
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight(),
+                        contentScale = ContentScale.Fit
                     )
+                }
             }
 
 
-        }
+            Spacer(modifier = Modifier.height(16.dp))
 
+            Button(
+                onClick = { imagePickerLauncher.launch("image/*") },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB0C4B1)), // Pastel Green
+                shape = RoundedCornerShape(12.dp),
+                elevation = ButtonDefaults.buttonElevation(2.dp), // Low Elevation for a Flat Look
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(imageVector = Icons.Filled.Image, contentDescription = "Gallery", tint = Color(0xFF4A4A4A))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("Select from Gallery", color = Color(0xFF4A4A4A)) // Dark Gray Text
+            }
 
-        Spacer(modifier = Modifier.height(16.dp))
+            // Camera Button
+            Button(
+                onClick = { cameraLauncher.launch(null) },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9FA8DA)), // Pastel Purple
+                shape = RoundedCornerShape(12.dp),
+                elevation = ButtonDefaults.buttonElevation(2.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(imageVector = Icons.Filled.PhotoCamera, contentDescription = "Camera", tint = Color(0xFF4A4A4A))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("Capture from Camera", color = Color(0xFF4A4A4A))
+            }
 
-        Button(onClick = { imagePickerLauncher.launch("image/*") }) {
-            Text("Select from Gallery")
-        }
+            Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = { cameraLauncher.launch(null) }) {
-            Text("Capture from Camera")
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedTextField(
-            value = positivePrompt,
-            onValueChange = { positivePrompt = it },
-            label = { Text("Positive Prompt") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedTextField(
-            value = negativePrompt,
-            onValueChange = { negativePrompt = it },
-            label = { Text("Negative Prompt") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Button(
-            onClick = {
-                imageUri?.let { uri ->
-                    val file = uriToFile(uri, context)
-                    file?.let {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            redesignedImage = flaskApi.redesignRoom(it, positivePrompt, negativePrompt)
-                        }
+            ExposedDropdownMenuBox(
+                expanded = expanded,
+                onExpandedChange = { expanded = !expanded }
+            ) {
+                OutlinedTextField(
+                    value = selectedText,
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text("Select Room") },
+                    modifier = Modifier.menuAnchor(),
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
                     }
-                } ?: Toast.makeText(context, "Please select an image", Toast.LENGTH_SHORT).show()
+                )
+
+                ExposedDropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    houseParts.forEach { part ->
+                        DropdownMenuItem(
+                            text = { Text(part) },
+                            onClick = {
+                                selectedText = part
+                                expanded = false
+                            }
+                        )
+                    }
+                }
             }
-        ) {
-            Text("Submit")
-        }
 
 
-        redesignedImage?.let { bitmap ->
-            Text("Redesigned Image:")
-            Image(
-                bitmap = bitmap.asImageBitmap(),
-                contentDescription = "Redesigned Room",
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = {
+                    if (
+                        imageUri == null
+                    ){
+                        Toast.makeText(context, "Please add a Image", Toast.LENGTH_SHORT).show()
+                        return@Button
+                    }
+
+
+                    val prompt = "minimalist interior design ((($selectedText))) with full furnitures: TV, living room Couch, table, lamp, "
+                    "Wall art, pillow, ((dark and moody atmosphere)), (((dim lighting))), warm incandescent lights, optical fiber, "
+                    "capricious lighting, ray tracing reflections, (((black and yellow color palette))), dark brown walls and ceiling, "
+                    "high contrast shadows, deep ambient lighting, cinematic low-key lighting, cozy and intimate environment --ar 16:9 --v 5.2"
+
+
+                    isLoading = true
+                    redesignedImage= null// Show loading indicator
+                    imageUri?.let { uri ->
+                        val file = uriToFile(uri, context)
+                        file?.let {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                val result = flaskApi.redesignRoom(it, prompt)
+                                if (result == null) {
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        Toast.makeText(context, "Error in processing.", Toast.LENGTH_SHORT).show()
+                                    }
+                                }else{
+                                    redesignedImage = result
+                                }
+                                isLoading = false  // Hide loading indicator
+
+                            }
+                        }
+                    } ?: Toast.makeText(context, "Please select an image", Toast.LENGTH_SHORT).show()
+                } ,
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF000991)), // Muted Blue-Gray
+                shape = RoundedCornerShape(10.dp),
+                elevation = ButtonDefaults.buttonElevation(3.dp),
                 modifier = Modifier
-                    .size(200.dp)
-                    .clip(RoundedCornerShape(10.dp))
-            )
+                    .fillMaxWidth()
+                    .height(50.dp)
+            ) {
+                Text("Redesign", color = Color(0xFFFFFFFF)) // Darker Text for Contrast
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (isLoading) {
+                CircularProgressIndicator()
+            }
+            redesignedImage?.let { bitmap ->
+                Text("Redesigned Image", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+
+                Card(
+                    shape = RoundedCornerShape(8.dp),
+                    elevation = CardDefaults.cardElevation(8.dp),
+                    border = BorderStroke(2.dp, Color.Black),
+                    modifier = Modifier.padding(8.dp) // Adds spacing around the card
+                ) {
+
+                        Image(
+                            bitmap = bitmap.asImageBitmap(),
+                            contentDescription = "Redesigned Image",
+                            modifier = Modifier
+                                .fillMaxWidth() // Ensure it fills the width
+                                .heightIn(max = 300.dp) ,// Set a maximum height
+                            contentScale = ContentScale.Crop
+                        )
+                }
+            }
         }
 
     }
-
-
-
 
 }
 

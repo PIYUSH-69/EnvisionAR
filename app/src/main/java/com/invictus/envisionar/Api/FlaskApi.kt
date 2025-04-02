@@ -16,15 +16,18 @@ import java.util.concurrent.TimeUnit
 class FlaskApi {
 
     private val client = OkHttpClient.Builder()
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
-        .writeTimeout(30, TimeUnit.SECONDS)
+        .connectTimeout(30, TimeUnit.MINUTES)
+        .readTimeout(30, TimeUnit.MINUTES)
+        .writeTimeout(30, TimeUnit.MINUTES)
         .build()
 
-    suspend fun redesignRoom(imageFile: File, positivePrompt: String, negativePrompt: String): Bitmap? {
+    suspend fun redesignRoom(imageFile: File, positivePrompt: String): Bitmap? {
         return try {
             withContext(Dispatchers.IO) {
-                val url = "http://192.168.0.106:5000/redesign"  // Replace with your Flask API URL
+                val url = "http://6bcb-34-91-94-172.ngrok-free.app/redesign"  // Replace with your Flask API URL
+
+                val negativePrompt =  "(((Bright room))), overly illuminated, high exposure, washed out colors, white walls, harsh lighting, "
+                "flat contrast, poorly lit environment, daylight, natural sunlight, washed-out textures, high brightness"
 
                 val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
                     .addFormDataPart("image", imageFile.name, RequestBody.create("image/*".toMediaTypeOrNull(), imageFile))

@@ -95,6 +95,8 @@ dependencies {
     implementation(libs.coil.gif) // Support for GIFs
 // Check for latest version
 
+    implementation(libs.androidx.material.icons.extended)
+
 
 
 //    implementation (libs.sdk.base)

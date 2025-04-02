@@ -4,7 +4,7 @@ agp = "8.9.1"
 appcompat = "1.7.0"
 arsceneview = "2.2.1"
 coilCompose = "2.6.0"
-coilComposeVersion = "2.5.0"
+coilComposeVersion = "2.6.0"
 constraintlayout = "2.2.1"
 core = "1.48.0"
 coreKtxVersion = "1.15.0"
@@ -19,6 +19,7 @@ activityCompose = "1.10.1"
 composeBom = "2025.03.01"
 lifecycleRuntimeKtxVersion = "2.8.7"
 material = "1.12.0"
+materialIconsExtended = "1.7.8"
 sdkBase = "1.200.1"
 sdkCommon = "1.200.1"
 sdkPanowidget = "1.200.1' // For VR Panoramas"
@@ -38,6 +39,7 @@ androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "a
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
 androidx-core-ktx-v1120 = { module = "androidx.core:core-ktx", version.ref = "coreKtxVersion" }
 androidx-lifecycle-runtime-ktx-v262 = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtxVersion" }
+androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 arsceneview = { module = "io.github.sceneview:arsceneview", version.ref = "arsceneview" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 coil-compose-v250 = { module = "io.coil-kt:coil-compose", version.ref = "coilComposeVersion" }
