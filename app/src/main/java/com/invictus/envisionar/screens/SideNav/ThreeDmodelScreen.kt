@@ -38,10 +38,30 @@ data class ModelItem(
 fun ThreeDmodelScreen() {
     val context = LocalContext.current
     val models = listOf(
-        ModelItem("Ancient Vase", "https://piyush-69.github.io/3d-models/IMG_9619.JPG ","https://piyush-69.github.io/3d-models/DamagedHelmet%20(1).glb"),
-        ModelItem("Spaceship", "https://cdn.web.imagine.art/imagine-frontend/assets/images/ai-image-generator-hero-image.png ","https://piyush-69.github.io/3d-models/DamagedHelmet%20(1).glb"),
-        ModelItem("Futuristic Car", "https://cdn.web.imagine.art/imagine-frontend/assets/images/ai-image-generator-hero-image.png ","https://piyush-69.github.io/3d-models/DamagedHelmet%20(1).glb")
+        ModelItem("Ancient Vase", "https://piyush-69.github.io/3d-models/hydria_apothecary_vase.png", "https://piyush-69.github.io/3d-models/hydria_apothecary_vase.glb"),
+        ModelItem("Damaged Helmet", "https://piyush-69.github.io/3d-models/DamagedHelmet.png", "https://piyush-69.github.io/3d-models/DamagedHelmet.glb"),
+        ModelItem("Bed King Sized", "https://piyush-69.github.io/3d-models/bed.png", "https://piyush-69.github.io/3d-models/bed.glb"),
+        ModelItem("Black Leather Chair", "https://piyush-69.github.io/3d-models/black_leather_chair.png", "https://piyush-69.github.io/3d-models/black_leather_chair.glb"),
+        ModelItem("Bookcase", "https://piyush-69.github.io/3d-models/bookcase_wood_and_metal.png", "https://piyush-69.github.io/3d-models/bookcase_wood_and_metal.glb"),
+        ModelItem("Drawer", "https://piyush-69.github.io/3d-models/ikea_8-drawer_dresser_white_stain.png", "https://piyush-69.github.io/3d-models/ikea_8-drawer_dresser_white_stain.glb"),
+        ModelItem("Desk", "https://piyush-69.github.io/3d-models/antique_desk.png", "https://piyush-69.github.io/3d-models/antique_desk.glb"),
+        ModelItem("Desk Lamp", "https://piyush-69.github.io/3d-models/ikea_desk-lamp.png", "https://piyush-69.github.io/3d-models/ikea_desk-lamp.glb"),
+        ModelItem("Bed Single", "https://piyush-69.github.io/3d-models/ikea_idanas_single_bed.png", "https://piyush-69.github.io/3d-models/ikea_idanas_single_bed.glb"),
+        ModelItem("Box Posing Rocking Chair", "https://piyush-69.github.io/3d-models/ikea_poang-rocking-chair.png", "https://piyush-69.github.io/3d-models/ikea_poang-rocking-chair.glb"),
+        ModelItem("Box Energy Shelf", "https://piyush-69.github.io/3d-models/vittsjo_-_ikea.jpg", "https://piyush-69.github.io/3d-models/vittsjo_-_ikea.glb"),
+        ModelItem("Indoor Plant", "https://piyush-69.github.io/3d-models/indoor_plant.png", "https://piyush-69.github.io/3d-models/indoor_plant.glb"),
+        ModelItem("Large Corner Sectional Sofa", "https://piyush-69.github.io/3d-models/large_corner_sectional_sofa.png", "https://piyush-69.github.io/3d-models/large_corner_sectional_sofa.glb"),
+        ModelItem("Modern Entertainment Center", "https://piyush-69.github.io/3d-models/modern_entertainment_center_free.png", "https://piyush-69.github.io/3d-models/modern_entertainment_center_free.glb"),
+        ModelItem("Modern Metal Frame Sofa", "https://piyush-69.github.io/3d-models/modern_metal_frame_sofa.png", "https://piyush-69.github.io/3d-models/modern_metal_frame_sofa.glb"),
+        ModelItem("Minimalistic Shelf", "https://piyush-69.github.io/3d-models/simple_tv_shelf_210cm.png", "https://piyush-69.github.io/3d-models/simple_tv_shelf_210cm.glb"),
+        ModelItem("Office Chair", "https://piyush-69.github.io/3d-models/office_chair.png", "https://piyush-69.github.io/3d-models/office_chair.glb"),
+        ModelItem("Simple Chair", "https://piyush-69.github.io/3d-models/simple_chair.png", "https://piyush-69.github.io/3d-models/simple_chair.glb"),
+        ModelItem("Office Desk", "https://piyush-69.github.io/3d-models/office_desk_140x60.png", "https://piyush-69.github.io/3d-models/office_desk_140x60.glb"),
+        ModelItem("Kitchen Cook Top", "https://piyush-69.github.io/3d-models/ikea_range_with_gas_cooktop.png", "https://piyush-69.github.io/3d-models/ikea_range_with_gas_cooktop.glb"),
+        ModelItem("Statue", "https://piyush-69.github.io/3d-models/statuette_de_femme_antique.png", "https://piyush-69.github.io/3d-models/statuette_de_femme_antique.glb"),
+        ModelItem("Wood Table", "https://piyush-69.github.io/3d-models/wood_table.jpg", "https://piyush-69.github.io/3d-models/wood_table.glb")
     )
+
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2), // 2 items per row

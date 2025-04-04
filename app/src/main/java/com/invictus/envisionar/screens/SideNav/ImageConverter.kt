@@ -10,15 +10,23 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.AutoFixHigh
+import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -48,9 +56,26 @@ fun ImageConverter(navController: NavController) {
         ) {
             Text(
                 text = "2D Image to 3D Model Convertor",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF5A3FC1)
+                fontSize = 20.sp, // Increased font size
+                fontWeight = FontWeight.ExtraBold,
+                color = Color.White, // White text for contrast
+                modifier = Modifier
+                    .padding(16.dp)
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(Color(0xFF5A3FC1), Color(0xFF9385E0)) // Gradient purple
+                        ),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .padding(horizontal = 16.dp, vertical = 8.dp), // Inner padding for a neat look
+                textAlign = TextAlign.Center,
+                style = TextStyle(
+                    shadow = Shadow( // Adding a subtle shadow
+                        color = Color.Gray,
+                        offset = Offset(2f, 2f),
+                        blurRadius = 4f
+                    )
+                )
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -72,6 +97,8 @@ fun ImageConverter(navController: NavController) {
                 ThreeDModelPreviewCard(context, navController = navController)
             }
 
+            Spacer(modifier = Modifier.height(12.dp))
+
         }
     }
 }
@@ -80,18 +107,21 @@ fun ImageConverter(navController: NavController) {
 fun UploadImageCard(selectedImageUri: Uri?, selectedBitmap: Bitmap?, onImageSelected: (Uri?, Bitmap?) -> Unit) {
     Card(
         modifier = Modifier
-            .fillMaxWidth(0.8f), // Adjust width for better centering
-        shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
+            .fillMaxWidth(0.85f) // Adjust width for better layout
+            .padding(16.dp), // Add some padding
+        shape = RoundedCornerShape(16.dp), // Modern rounded corners
+        elevation = CardDefaults.cardElevation(6.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)) // Light gray background
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier
+                .fillMaxWidth().padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box(
                 modifier = Modifier
-                    .size(150.dp) // Increased Image Size
-                    .background(Color.LightGray, shape = RoundedCornerShape(8.dp)),
+                    .size(160.dp) // Increased Image Size
+                    .background(Color.LightGray, shape = RoundedCornerShape(12.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 if (selectedImageUri != null) {
@@ -111,7 +141,7 @@ fun UploadImageCard(selectedImageUri: Uri?, selectedBitmap: Bitmap?, onImageSele
                         imageVector = Icons.Default.Home,
                         contentDescription = "Upload",
                         tint = Color.Gray,
-                        modifier = Modifier.size(64.dp) // Increased Icon Size
+                        modifier = Modifier.size(72.dp) // Increased Icon Size
                     )
                 }
             }
@@ -123,6 +153,7 @@ fun UploadImageCard(selectedImageUri: Uri?, selectedBitmap: Bitmap?, onImageSele
             Spacer(modifier = Modifier.height(8.dp))
 
             UploadImageButton(onImageSelected)
+
         }
     }
 }
@@ -132,32 +163,40 @@ fun ProcessingOptionsCard(setBoolean: (Boolean) -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)) // Light background
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text("Processing Options", fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.height(8.dp))
+            Text("Processing Options", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+
+            Spacer(modifier = Modifier.height(12.dp))
 
             var selectedQuality by remember { mutableStateOf("High") }
             DropdownMenuField("Quality", listOf("Low", "Medium", "High")) {
                 selectedQuality = it
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             var selectedFormat by remember { mutableStateOf("GLB") }
             DropdownMenuField("Format", listOf("GLB", "OBJ", "STL")) {
                 selectedFormat = it
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
+            // Convert to 3D Button
             Button(
-                onClick = { setBoolean(true) }, // Update boolean state
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(Color(0xFF5A3FC1))
+                onClick = { setBoolean(true) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)) // Green color
             ) {
-                Text("Convert to 3D", color = Color.White)
+                Icon(Icons.Default.AutoFixHigh, contentDescription = "Convert", tint = Color.White)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("Convert to 3D", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
             }
         }
     }
@@ -223,13 +262,34 @@ fun UploadImageButton(onImageSelected: (Uri?, Bitmap?) -> Unit) {
         contract = ActivityResultContracts.TakePicturePreview()
     ) { bitmap: Bitmap? -> onImageSelected(null, bitmap) }
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Button(onClick = { galleryLauncher.launch("image/*") }) {
-            Text(text = "Choose from Gallery")
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        // Gallery Button
+        Button(
+            onClick = { galleryLauncher.launch("image/*") },
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6A5ACD)), // Soft Purple
+            modifier = Modifier.fillMaxWidth() // Adjust width
+        ) {
+            Icon(Icons.Default.Image, contentDescription = "Gallery", tint = Color.White)
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = "Choose from Gallery", color = Color.White, fontWeight = FontWeight.Bold)
         }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = { cameraLauncher.launch(null) }) {
-            Text(text = "Capture from Camera")
+
+        Spacer(modifier = Modifier.height(3.dp))
+
+        // Camera Button
+        Button(
+            onClick = { cameraLauncher.launch(null) },
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF32CD32)), // Green
+            modifier = Modifier.fillMaxWidth() // Adjust width
+        ) {
+            Icon(Icons.Default.CameraAlt, contentDescription = "Camera", tint = Color.White)
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = "Capture from Camera", color = Color.White, fontWeight = FontWeight.Bold)
         }
     }
 }
@@ -240,24 +300,34 @@ fun DropdownMenuField(label: String, options: List<String>, onSelected: (String)
     var selectedOption by remember { mutableStateOf(options[0]) }
 
     Column {
-        Text(text = label, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+        Text(text = label, fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.DarkGray)
+        Spacer(modifier = Modifier.height(8.dp))
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White, shape = RoundedCornerShape(8.dp))
-                .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
+                .background(Color.White, shape = RoundedCornerShape(12.dp))
+                .border(1.dp, Color(0xFF6A5ACD), shape = RoundedCornerShape(12.dp)) // Soft Purple Border
                 .clickable { expanded = true }
-                .padding(12.dp)
+                .padding(16.dp), // Better padding for clean UI
+            contentAlignment = Alignment.Center
         ) {
-            Text(text = selectedOption)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = selectedOption, fontSize = 14.sp, color = Color.Black)
+                Icon(Icons.Default.ArrowDropDown, contentDescription = "Dropdown", tint = Color.Gray)
+            }
         }
+
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             options.forEach { option ->
                 DropdownMenuItem(onClick = {
                     selectedOption = option
                     expanded = false
                     onSelected(option)
-                }, text = { Text(option) })
+                }, text = { Text(option, fontSize = 14.sp) })
             }
         }
     }
