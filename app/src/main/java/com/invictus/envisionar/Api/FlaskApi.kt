@@ -24,7 +24,7 @@ class FlaskApi {
     suspend fun redesignRoom(imageFile: File, positivePrompt: String): Bitmap? {
         return try {
             withContext(Dispatchers.IO) {
-                val url = "http://6bcb-34-91-94-172.ngrok-free.app/redesign"  // Replace with your Flask API URL
+                val url = "http://6cc4-34-16-250-101.ngrok-free.app/redesign"  // Replace with your Flask API URL
 
                 val negativePrompt =  "(((Bright room))), overly illuminated, high exposure, washed out colors, white walls, harsh lighting, "
                 "flat contrast, poorly lit environment, daylight, natural sunlight, washed-out textures, high brightness"

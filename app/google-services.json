@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1069926447307",
+    "project_id": "envisionar-3ae56",
+    "storage_bucket": "envisionar-3ae56.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1069926447307:android:624ad023c610d3d035034e",
+        "android_client_info": {
+          "package_name": "com.invictus.envisionar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdoENylDf5qb8MJfrYOfniwq2t7lmy2sg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

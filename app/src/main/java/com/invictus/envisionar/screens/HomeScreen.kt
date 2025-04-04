@@ -12,11 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.invictus.envisionar.R
 import com.invictus.envisionar.screens.SideNav.HomePageContent
@@ -54,29 +54,51 @@ fun HomeScreen(navController: NavController) {
     ) {
         Scaffold(
             topBar = {
-                TopAppBar(
-                    title = { Text(currentScreen, color = Color.White) },
-                    navigationIcon = {
-                        IconButton(onClick = {
-                            scope.launch { drawerState.open() }
-                        }) {
-                            Icon(Icons.Filled.Menu, contentDescription = "Open drawer", tint = Color.White)
-                        }
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color(0xFF6200EE),
-                        titleContentColor = Color.White
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(90.dp) // Height of the TopAppBar
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                colors = listOf(Color(0xFF000000), Color(0xFF673AB7)) // Green gradient
+                            )
+                        )
+                ) {
+                    TopAppBar(
+                        title = {
+                            Text(
+                                text = currentScreen,
+                                color = Color.White,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        },
+                        navigationIcon = {
+                            IconButton(onClick = { scope.launch { drawerState.open() } }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Menu,
+                                    contentDescription = "Open drawer",
+                                    tint = Color.White,
+                                    modifier = Modifier.size(28.dp)
+                                )
+                            }
+                        },
+                        colors = TopAppBarDefaults.topAppBarColors(
+                            containerColor = Color.Transparent, // Transparent to let gradient show
+                            titleContentColor = Color.White
+                        ),
+                        modifier = Modifier.background(Color.Transparent)
                     )
-                )
+                }
             },
             content = { paddingValues ->
                 Box(modifier = Modifier.padding(paddingValues)) {
                     when (currentScreen) {
-                        "Home" -> HomePageContent()
+                        "Home" -> HomePageContent { screen -> currentScreen = screen }
                         "Image to 3D" -> ImageConverter(navController)
                         "3D Models"-> ThreeDmodelScreen()
                         "Room Redesigner"->RoomRedesignerScreen()
-                        else -> HomePageContent()
+                        else -> HomePageContent { screen -> currentScreen = screen }
                     }
                 }
             }
@@ -94,7 +116,7 @@ fun DrawerContent(currentScreen: String, onNavigate: (String) -> Unit) {
                 .fillMaxWidth()
                 .background(
                     brush = Brush.horizontalGradient(
-                        colors = listOf(Color(0xFF6A11CB), Color(0xFF2575FC)) // Purple to Blue gradient
+                        colors = listOf(Color(0xFF831BFF), Color(0xFF0046B2)) // Purple to Blue gradient
                     )
                 )
                 .padding(vertical = 16.dp, horizontal = 24.dp)
@@ -128,7 +150,7 @@ fun DrawerItem(text: String, icon: Painter, isSelected: Boolean, onClick: () -> 
         Icon(
             painter = icon,
             contentDescription = text,
-            tint = MaterialTheme.colorScheme.primary,
+            tint = Color.Black, // Change color here
             modifier = Modifier.size(30.dp) // Set icon size to 20dp (adjust if needed)
         )
         Spacer(modifier = Modifier.width(12.dp))
