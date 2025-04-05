@@ -51,7 +51,7 @@ fun ThreeDmodelScreen() {
         ModelItem("Box Energy Shelf", "https://piyush-69.github.io/3d-models/vittsjo_-_ikea.jpg", "https://piyush-69.github.io/3d-models/vittsjo_-_ikea.glb"),
         ModelItem("Indoor Plant", "https://piyush-69.github.io/3d-models/indoor_plant.png", "https://piyush-69.github.io/3d-models/indoor_plant.glb"),
         ModelItem("Large Corner Sectional Sofa", "https://piyush-69.github.io/3d-models/large_corner_sectional_sofa.png", "https://piyush-69.github.io/3d-models/large_corner_sectional_sofa.glb"),
-        ModelItem("Modern Entertainment Center", "https://piyush-69.github.io/3d-models/modern_entertainment_center_free.png", "https://piyush-69.github.io/3d-models/modern_entertainment_center_free.glb"),
+        ModelItem("TV unit", "https://piyush-69.github.io/3d-models/modern_entertainment_center_free.png", "https://piyush-69.github.io/3d-models/modern_entertainment_center_free.glb"),
         ModelItem("Modern Metal Frame Sofa", "https://piyush-69.github.io/3d-models/modern_metal_frame_sofa.png", "https://piyush-69.github.io/3d-models/modern_metal_frame_sofa.glb"),
         ModelItem("Minimalistic Shelf", "https://piyush-69.github.io/3d-models/simple_tv_shelf_210cm.png", "https://piyush-69.github.io/3d-models/simple_tv_shelf_210cm.glb"),
         ModelItem("Office Chair", "https://piyush-69.github.io/3d-models/office_chair.png", "https://piyush-69.github.io/3d-models/office_chair.glb"),
@@ -79,15 +79,16 @@ fun ModelCard(model: ModelItem, context: android.content.Context) {
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFFFFFFF)),
+            .fillMaxWidth()
+            .height(250.dp), // 🔥 Fixed height to ensure uniform card size
+        colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         shape = RoundedCornerShape(12.dp)
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 0.dp), // Explicitly remove extra bottom padding
+                .fillMaxSize()
+                .padding(horizontal = 8.dp, vertical = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
@@ -95,7 +96,7 @@ fun ModelCard(model: ModelItem, context: android.content.Context) {
                 contentDescription = model.name,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(180.dp)
+                    .height(140.dp) // Adjusted to leave space for other content
                     .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)),
                 contentScale = ContentScale.Crop
             )
@@ -104,36 +105,45 @@ fun ModelCard(model: ModelItem, context: android.content.Context) {
 
             Text(
                 text = model.name,
-                fontSize = 20.sp,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(5.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             Button(
                 onClick = {
                     val intent = Intent(context, ArScreen::class.java).apply {
-                        putExtra("MODEL_URL", model.imageurl)
+                        putExtra("MODEL_URL", model.modelurl)
                     }
                     context.startActivity(intent)
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF271DB9)),
                 shape = RoundedCornerShape(8.dp),
-                modifier = Modifier.padding(1.dp)
+                modifier = Modifier
+                    .padding(4.dp)
+                    .height(36.dp)
             ) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.vr), // Vector drawable
+                    imageVector = ImageVector.vectorResource(id = R.drawable.vr),
                     contentDescription = "AR Icon",
                     tint = Color.White,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(20.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "Open in AR", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                Text(
+                    text = "Open in AR",
+                    color = Color.White,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
     }
 }
+
 
 
 
