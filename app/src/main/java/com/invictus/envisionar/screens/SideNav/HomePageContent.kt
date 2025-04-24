@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -55,7 +56,8 @@ fun HomePageContent(onNavigate: (String) -> Unit) {
                 ModelCard(
                     title = if (index == 0) "Modern Chair" else "Table Lamp",
                     date = if (index == 0) "Created 2 days ago" else "Created 3 days ago",
-                    model = if (index == 0) "modern_entertainment_center_free" else "antique_desk"
+                    model = if (index == 0) "https://piyush-69.github.io/3d-models/office_chair.glb" else "https://piyush-69.github.io/3d-models/ikea_desk-lamp.glb",
+                    imageurl = if (index == 0) "https://piyush-69.github.io/3d-models/office_chair.png" else "https://piyush-69.github.io/3d-models/ikea_desk-lamp.png"
                 )
                 Spacer(modifier = Modifier.width(0.dp))
             }
@@ -74,21 +76,21 @@ fun HomePageContent(onNavigate: (String) -> Unit) {
             onNavigate = { onNavigate("3D Models") } // ✅ Pass it as a lambda
         )
         QuickActionCard(
-            title = "VR Mode", subtitle = "Immerse yourself in VR", backgroundColor = Color(0xFF4169E1),R.drawable.cube,
+            title = "Room Redesigner", subtitle = "Redesign your room with our AI", backgroundColor = Color(0xFF4169E1),R.drawable.cube,
             onNavigate = { onNavigate("Room Redesigner") } // ✅ Pass it as a lambda
         )
     }
 }
 
 @Composable
-fun ModelCard(title: String, date: String, model: String) {
+fun ModelCard(title: String, date: String, model: String , imageurl : String) {
     Card(
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
             .width(140.dp)
-            .height(185.dp) // Ensures enough space for text
+            .height(200.dp) // Ensures enough space for text
             .padding(8.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)), // Light gray background
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFFFFFFF)), // Light gray background
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp) // Adds a shadow effect
     ) {
         Column(
@@ -98,16 +100,20 @@ fun ModelCard(title: String, date: String, model: String) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(110.dp) // Image section height
+                    .height(130.dp) // Image section height
                     .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
                     .background(Color.LightGray), // Placeholder background in case image fails to load
                 contentAlignment = Alignment.Center
             ) {
                 Image(
-                    painter = rememberAsyncImagePainter("https://piyush-69.github.io/3d-models/antique_desk.png"),
+                    painter = rememberAsyncImagePainter(imageurl),
                     contentDescription = "Model Image",
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Fit // Ensures proper aspect ratio without stretching
+                    modifier = Modifier.fillMaxSize()
+                        .graphicsLayer(
+                            scaleX = 1.5f, // 2x zoom
+                            scaleY = 1.5f,
+                ),
+                    contentScale = ContentScale.Crop
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))

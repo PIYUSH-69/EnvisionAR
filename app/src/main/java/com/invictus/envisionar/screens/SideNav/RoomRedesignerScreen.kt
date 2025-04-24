@@ -1,8 +1,11 @@
 package com.invictus.envisionar.screens.SideNav
 
+import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Environment
+import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Camera
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.*
@@ -96,7 +100,7 @@ fun RoomRedesignerScreen() {
                         modifier = Modifier
                             .fillMaxWidth()
                             .wrapContentHeight(),
-                        contentScale = ContentScale.Fit
+                        contentScale = ContentScale.Crop
                     )
                 }
             }
@@ -176,11 +180,36 @@ fun RoomRedesignerScreen() {
                     }
 
 
+                    val roomDescriptions = mapOf(
+                        "Living Room" to "a minimalist interior design of a cozy (((living room)))",
+                        "Bedroom" to "a minimalist interior design of a (((stylish bedroom)))",
+                        "Kitchen" to "a minimalist interior design of a (((modern kitchen)))",
+                        "Bathroom" to "a minimalist interior design of an (((elegant bathroom)))"
+                    )
+
+                    val roomFurnitures = mapOf(
+                        "Living Room" to "TV, couch, coffee table, floor lamp, wall art, pillows",
+                        "Bedroom" to "bed, side tables, reading lamp, wardrobe, curtains, cozy rug",
+                        "Kitchen" to "modular cabinets, island counter, overhead lights, bar stools, dining table",
+                        "Bathroom" to "bathtub, vanity mirror, warm lighting, towel rack, minimal shelves"
+                    )
+
+                    val selectedRoomDescription = roomDescriptions[selectedText] ?: "a minimalist interior design of a modern space"
+                    val selectedFurnitures = roomFurnitures[selectedText] ?: "TV, couch, table, lamp"
+
+
+
                     val prompt = "minimalist interior design ((($selectedText))) with full furnitures: TV, living room Couch, table, lamp, "
                     "Wall art, pillow, ((dark and moody atmosphere)), (((dim lighting))), warm incandescent lights, optical fiber, "
                     "capricious lighting, ray tracing reflections, (((black and yellow color palette))), dark brown walls and ceiling, "
                     "high contrast shadows, deep ambient lighting, cinematic low-key lighting, cozy and intimate environment --ar 16:9 --v 5.2"
 
+
+
+                    val prompt2 = "$selectedRoomDescription with full furnitures: $selectedFurnitures, " +
+                            "((dark and moody atmosphere)), (((dim lighting))), warm incandescent lights, optical fiber, " +
+                            "capricious lighting, ray tracing reflections, (((black and yellow color palette))), dark brown walls and ceiling, " +
+                            "high contrast shadows, deep ambient lighting, cinematic low-key lighting, cozy and intimate environment --ar 16:9 --v 5.2"
 
                     isLoading = true
                     redesignedImage= null// Show loading indicator
@@ -188,10 +217,10 @@ fun RoomRedesignerScreen() {
                         val file = uriToFile(uri, context)
                         file?.let {
                             CoroutineScope(Dispatchers.IO).launch {
-                                val result = flaskApi.redesignRoom(it, prompt)
+                                val result = flaskApi.redesignRoom(it, prompt2)
                                 if (result == null) {
                                     CoroutineScope(Dispatchers.Main).launch {
-                                        Toast.makeText(context, "Error in processing.", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(context, "Error in processing. Please check is Server is live", Toast.LENGTH_SHORT).show()
                                     }
                                 }else{
                                     redesignedImage = result
@@ -217,6 +246,7 @@ fun RoomRedesignerScreen() {
             if (isLoading) {
                 CircularProgressIndicator()
             }
+
             redesignedImage?.let { bitmap ->
                 Text("Redesigned Image", fontSize = 18.sp, fontWeight = FontWeight.Bold)
 
@@ -236,12 +266,55 @@ fun RoomRedesignerScreen() {
                             contentScale = ContentScale.Crop
                         )
                 }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    onClick = {
+                        saveImageToGallery(context, bitmap, "redesigned_image_${System.currentTimeMillis()}.png")
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF9800)), // Pastel Purple
+                    shape = RoundedCornerShape(12.dp),
+                    elevation = ButtonDefaults.buttonElevation(2.dp),
+                ) {
+                    Icon(imageVector = Icons.Filled.Download, contentDescription = "Download", tint = Color(0xFF4A4A4A))
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Download Image", color = Color(0xFF4A4A4A))
+                }
+
             }
         }
 
     }
 
 }
+
+fun saveImageToGallery(context: Context, bitmap: Bitmap, fileName: String) {
+    val resolver = context.contentResolver
+    val contentValues = ContentValues().apply {
+        put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+        put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
+        put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/RedesignedImages")
+    }
+
+    val uri: Uri? = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+
+    if (uri != null) {
+        val outputStream = resolver.openOutputStream(uri)
+        if (outputStream != null) {
+            outputStream.use {
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
+            }
+            Toast.makeText(context, "Image saved to gallery", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "Failed to open output stream", Toast.LENGTH_SHORT).show()
+        }
+    } else {
+        Toast.makeText(context, "Failed to create image URI", Toast.LENGTH_SHORT).show()
+    }
+}
+
+
 
 fun saveBitmapToCache(context: Context, bitmap: Bitmap): Uri? {
     val file = File(context.cacheDir, "captured_image.png")

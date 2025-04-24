@@ -1,4 +1,5 @@
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,6 +19,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.invictus.envisionar.LoginScreen
 import com.invictus.envisionar.R
 import com.invictus.envisionar.screens.SideNav.HomePageContent
 import com.invictus.envisionar.screens.SideNav.ImageConverter
@@ -47,7 +51,8 @@ fun HomeScreen(navController: NavController) {
                         scope.launch {
                             drawerState.close()
                         }
-                    }
+                    },
+                    navController = navController
                 )
             }
         }
@@ -107,33 +112,67 @@ fun HomeScreen(navController: NavController) {
 }
 
 @Composable
-fun DrawerContent(currentScreen: String, onNavigate: (String) -> Unit) {
-    Column(
-        modifier = Modifier.fillMaxWidth().padding(0.dp)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    brush = Brush.horizontalGradient(
-                        colors = listOf(Color(0xFF831BFF), Color(0xFF0046B2)) // Purple to Blue gradient
-                    )
-                )
-                .padding(vertical = 16.dp, horizontal = 24.dp)
-        ) {
-            Text(
-                "Envision AR",
-                style = MaterialTheme.typography.headlineSmall.copy(color = Color.White),
-                modifier = Modifier.align(Alignment.CenterStart)
-            )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
+fun DrawerContent(currentScreen: String, onNavigate: (String) -> Unit, navController: NavController) {
 
-        DrawerItem("Home", rememberVectorPainter(Icons.Filled.Home), currentScreen == "Home") { onNavigate("Home") }
-        DrawerItem("Image to 3D", painterResource(id = R.drawable.model), currentScreen == "Image to 3D") { onNavigate("Image to 3D") }
-        DrawerItem("3D Models", painterResource(id = R.drawable.vr), currentScreen == "3D Models") { onNavigate("3D Models") }
-        DrawerItem("Room Redesigner", painterResource(id = R.drawable.plans), currentScreen == "Room Redesigner") { onNavigate("Room Redesigner") }
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ){
+
+        Column(
+            modifier = Modifier.fillMaxSize().padding(0.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(Color(0xFF831BFF), Color(0xFF0046B2)) // Purple to Blue gradient
+                        )
+                    )
+                    .padding(vertical = 16.dp, horizontal = 24.dp)
+            ) {
+                Text(
+                    "Envision AR",
+                    style = MaterialTheme.typography.headlineSmall.copy(color = Color.White),
+                    modifier = Modifier.align(Alignment.CenterStart)
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+
+            DrawerItem("Home", rememberVectorPainter(Icons.Filled.Home), currentScreen == "Home") { onNavigate("Home") }
+            DrawerItem("Image to 3D", painterResource(id = R.drawable.model), currentScreen == "Image to 3D") { onNavigate("Image to 3D") }
+            DrawerItem("3D Models", painterResource(id = R.drawable.vr), currentScreen == "3D Models") { onNavigate("3D Models") }
+            DrawerItem("Room Redesigner", painterResource(id = R.drawable.plans), currentScreen == "Room Redesigner") { onNavigate("Room Redesigner") }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize(),
+                contentAlignment = Alignment.BottomCenter // This aligns children inside Box
+            ) {
+                OutlinedButton(
+                    onClick = {
+                        val firebaseAuth = Firebase.auth
+                        firebaseAuth.signOut()
+                        navController.navigate(LoginScreen)
+                         },
+                    border = BorderStroke(1.dp, Color.Red),
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    Text("Sign Out", color = Color.Red)
+                }
+
+            }
+        }
+
+
     }
+
+
+
+
 }
 
 

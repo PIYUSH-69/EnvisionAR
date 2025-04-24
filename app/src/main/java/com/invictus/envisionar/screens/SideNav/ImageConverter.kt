@@ -9,7 +9,6 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.AutoFixHigh
 import androidx.compose.material.icons.filled.CameraAlt
@@ -25,7 +24,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -33,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.invictus.envisionar.VrScreen
+import com.invictus.envisionar.R
 import com.invictus.envisionar.screens.ArScreen
 import kotlinx.coroutines.delay
 
@@ -115,7 +117,8 @@ fun UploadImageCard(selectedImageUri: Uri?, selectedBitmap: Bitmap?, onImageSele
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth().padding(16.dp),
+                .fillMaxWidth()
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box(
@@ -204,9 +207,15 @@ fun ProcessingOptionsCard(setBoolean: (Boolean) -> Unit) {
 
 @Composable
 fun ThreeDModelPreviewCard(context: android.content.Context, navController: NavController) {
-    val modelUrl = "https://modelviewer.dev/shared-assets/models/Astronaut.glb" // Replace with your model URL
+    val modelUrl = "https://piyush-69.github.io/3d-models/office_chair.glb" // Replace with your model URL
     var isLoading by remember { mutableStateOf(true) }
 
+    LaunchedEffect(isLoading) {
+        if (isLoading) {
+            delay(5000L) // 5 seconds
+            isLoading = false
+        }
+    }
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -219,7 +228,9 @@ fun ThreeDModelPreviewCard(context: android.content.Context, navController: NavC
         ) {
 
             Text(
-                modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally),
                 text = "Output 3D Model",
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
@@ -231,18 +242,61 @@ fun ThreeDModelPreviewCard(context: android.content.Context, navController: NavC
 
             Box(
                 modifier = Modifier
-                    .size(150.dp)
+                    .size(320.dp)
                     .background(Color.LightGray, shape = RoundedCornerShape(8.dp)),
                 contentAlignment = Alignment.Center
             ) {
+
                 if (isLoading) {
                     CircularProgressIndicator()
                 } else {
-                    Icon(
-                        imageVector = Icons.Default.AccountCircle,
-                        contentDescription = "3D Preview",
-                        modifier = Modifier.size(64.dp)
-                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 8.dp, vertical = 8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            painter = rememberAsyncImagePainter("https://piyush-69.github.io/3d-models/wood_table.jpg"),
+                            contentDescription = "Model",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(250.dp) // Adjusted to leave space for other content
+                                .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)),
+                            contentScale = ContentScale.Crop
+                        )
+
+
+
+
+                        Button(
+                            onClick = {
+                                val intent = Intent(context, ArScreen::class.java).apply {
+                                    putExtra("MODEL_URL", modelUrl)
+                                }
+                                context.startActivity(intent)
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF271DB9)),
+                            shape = RoundedCornerShape(8.dp),
+                            modifier = Modifier
+                                .padding(4.dp)
+                                .height(36.dp)
+                        ) {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(id = R.drawable.vr),
+                                contentDescription = "AR Icon",
+                                tint = Color.White,
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = "Open in AR",
+                                color = Color.White,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(8.dp))
@@ -250,7 +304,6 @@ fun ThreeDModelPreviewCard(context: android.content.Context, navController: NavC
         }
     }
 }
-
 
 @Composable
 fun UploadImageButton(onImageSelected: (Uri?, Bitmap?) -> Unit) {

@@ -39,7 +39,6 @@ fun ThreeDmodelScreen() {
     val context = LocalContext.current
     val models = listOf(
         ModelItem("Ancient Vase", "https://piyush-69.github.io/3d-models/hydria_apothecary_vase.png", "https://piyush-69.github.io/3d-models/hydria_apothecary_vase.glb"),
-        ModelItem("Damaged Helmet", "https://piyush-69.github.io/3d-models/DamagedHelmet.png", "https://piyush-69.github.io/3d-models/DamagedHelmet.glb"),
         ModelItem("Bed King Sized", "https://piyush-69.github.io/3d-models/bed.png", "https://piyush-69.github.io/3d-models/bed.glb"),
         ModelItem("Black Leather Chair", "https://piyush-69.github.io/3d-models/black_leather_chair.png", "https://piyush-69.github.io/3d-models/black_leather_chair.glb"),
         ModelItem("Bookcase", "https://piyush-69.github.io/3d-models/bookcase_wood_and_metal.png", "https://piyush-69.github.io/3d-models/bookcase_wood_and_metal.glb"),
@@ -47,12 +46,12 @@ fun ThreeDmodelScreen() {
         ModelItem("Desk", "https://piyush-69.github.io/3d-models/antique_desk.png", "https://piyush-69.github.io/3d-models/antique_desk.glb"),
         ModelItem("Desk Lamp", "https://piyush-69.github.io/3d-models/ikea_desk-lamp.png", "https://piyush-69.github.io/3d-models/ikea_desk-lamp.glb"),
         ModelItem("Bed Single", "https://piyush-69.github.io/3d-models/ikea_idanas_single_bed.png", "https://piyush-69.github.io/3d-models/ikea_idanas_single_bed.glb"),
-        ModelItem("Box Posing Rocking Chair", "https://piyush-69.github.io/3d-models/ikea_poang-rocking-chair.png", "https://piyush-69.github.io/3d-models/ikea_poang-rocking-chair.glb"),
+        ModelItem("Rocking Chair", "https://piyush-69.github.io/3d-models/ikea_poang-rocking-chair.png", "https://piyush-69.github.io/3d-models/ikea_poang-rocking-chair.glb"),
         ModelItem("Box Energy Shelf", "https://piyush-69.github.io/3d-models/vittsjo_-_ikea.jpg", "https://piyush-69.github.io/3d-models/vittsjo_-_ikea.glb"),
         ModelItem("Indoor Plant", "https://piyush-69.github.io/3d-models/indoor_plant.png", "https://piyush-69.github.io/3d-models/indoor_plant.glb"),
-        ModelItem("Large Corner Sectional Sofa", "https://piyush-69.github.io/3d-models/large_corner_sectional_sofa.png", "https://piyush-69.github.io/3d-models/large_corner_sectional_sofa.glb"),
+        ModelItem("Large Sofa", "https://piyush-69.github.io/3d-models/large_corner_sectional_sofa.png", "https://piyush-69.github.io/3d-models/large_corner_sectional_sofa.glb"),
         ModelItem("TV unit", "https://piyush-69.github.io/3d-models/modern_entertainment_center_free.png", "https://piyush-69.github.io/3d-models/modern_entertainment_center_free.glb"),
-        ModelItem("Modern Metal Frame Sofa", "https://piyush-69.github.io/3d-models/modern_metal_frame_sofa.png", "https://piyush-69.github.io/3d-models/modern_metal_frame_sofa.glb"),
+        ModelItem("Metal Frame Sofa", "https://piyush-69.github.io/3d-models/modern_metal_frame_sofa.png", "https://piyush-69.github.io/3d-models/modern_metal_frame_sofa.glb"),
         ModelItem("Minimalistic Shelf", "https://piyush-69.github.io/3d-models/simple_tv_shelf_210cm.png", "https://piyush-69.github.io/3d-models/simple_tv_shelf_210cm.glb"),
         ModelItem("Office Chair", "https://piyush-69.github.io/3d-models/office_chair.png", "https://piyush-69.github.io/3d-models/office_chair.glb"),
         ModelItem("Simple Chair", "https://piyush-69.github.io/3d-models/simple_chair.png", "https://piyush-69.github.io/3d-models/simple_chair.glb"),
@@ -80,7 +79,7 @@ fun ModelCard(model: ModelItem, context: android.content.Context) {
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()
-            .height(250.dp), // 🔥 Fixed height to ensure uniform card size
+            .height(230.dp), // 🔥 Fixed height to ensure uniform card size
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         shape = RoundedCornerShape(12.dp)
@@ -110,8 +109,6 @@ fun ModelCard(model: ModelItem, context: android.content.Context) {
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
-
-            Spacer(modifier = Modifier.height(8.dp))
 
             Button(
                 onClick = {
