@@ -25,7 +25,7 @@ fun SplashScreen(navController: NavController) {
     val context = LocalContext.current
     LaunchedEffect(Unit) {
         delay(3000) // Delay for 3 seconds
-        navController.navigate(HomeScreen) {
+        navController.navigate(LoginScreen) {
             popUpTo(SplashScreen) { inclusive = true } // Removes SplashScreen from back stack
         }
     }

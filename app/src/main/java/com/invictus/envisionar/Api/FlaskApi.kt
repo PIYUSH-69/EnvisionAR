@@ -24,7 +24,7 @@ class FlaskApi {
     suspend fun redesignRoom(imageFile: File, positivePrompt: String): Bitmap? {
         return try {
             withContext(Dispatchers.IO) {
-                val url = "http://525a-34-19-0-205.ngrok-free.app/redesign"  // Replace with your Flask API URL
+                val url = "http://2f79-35-186-151-99.ngrok-free.app/redesign"  // Replace with your Flask API URL
 
                 val negativePrompt = "(((Ugly))), low-resolution, morbid, blurry, cropped, deformed, dehydrated, text, disfigured, duplicate, error, extra arms, extra fingers, extra legs, extra limbs, fused fingers, gross proportions, jpeg artifacts, long neck, low resolution, tiling, poorly drawn feet, extra limbs, disfigured, body out of frame, cut off, low contrast, underexposed, overexposed, bad art, beginner, amateur, distorted face, low quality, lowres, low saturation, deformed body features, watermark, water mark"
 
